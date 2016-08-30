@@ -46,5 +46,6 @@
     <export>
         <roboy_simulation plugin="${prefix}/muscle_plugin.xml"/>
         <rviz plugin="${prefix}/walking_plugin.xml"/>
+        <gazebo_ros plugin_path="${prefix}/lib" gazebo_media_path="${prefix}" />
     </export>
 </package>
