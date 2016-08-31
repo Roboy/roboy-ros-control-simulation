@@ -14,30 +14,35 @@ find_package(Protobuf REQUIRED)
 include(${QT_USE_FILE})
 add_definitions(${QT_DEFINITIONS})
 
-find_package(gazebo REQUIRED)
 find_package(Boost REQUIRED)
+find_package(gazebo REQUIRED)
+
+include(FindPkgConfig)
+pkg_check_modules(OGRE OGRE)
 
 find_package(catkin REQUIRED 
-  COMPONENTS 
+  COMPONENTS
+    angles
     common_utilities
-    controller_manager
     flexrayusbinterface
+    gazebo_ros
     gazebo_ros_control
-    gazebo_ros_pkgs
-    geometry_msgs     
+    geometry_msgs
     message_generation
+    pluginlib
     roscpp
     rviz
-    std_msgs                            
+    std_msgs
 )
 
-link_directories(${gazebo_LIBRARY_DIRS})
+link_directories(${GAZEBO_LIBRARY_DIRS})
 include_directories(
   include
   ${catkin_INCLUDE_DIRS}
-  ${gazebo_INCLUDE_DIRS}
+  ${GAZEBO_INCLUDE_DIRS}
   ${Boost_INCLUDE_DIRS}
-
+  ${OGRE_INCLUDE_DIRS}
+  ${OGRE_INCLUDE_DIRS}/Paging
 )
 
 add_message_files(
@@ -56,8 +61,20 @@ generate_messages(
 )
 
 catkin_package(
-  CATKIN_DEPENDS message_runtime message_generation
-  DEPENDS Boost gazebo
+  CATKIN_DEPENDS
+    angles
+    common_utilities
+    flexrayusbinterface
+    gazebo_ros
+    gazebo_ros_control
+    geometry_msgs
+    message_generation
+    message_runtime
+    pluginlib
+    roscpp
+    rviz
+    std_msgs
+  DEPENDS Boost gazebo ogre
   INCLDE_DIRS include
   LIBRARIES 
     contact_plugin
@@ -78,7 +95,7 @@ add_library(contact_plugin
 )
 target_link_libraries(contact_plugin 
   ${catkin_LIBRARIES}
-  ${GAZEBO_LIBRARIES}
+  ${gazebo_LIBRARIES}
 )
 
 
@@ -92,7 +109,7 @@ add_dependencies(force_torque_plugin
 )
 target_link_libraries(force_torque_plugin
   ${catkin_LIBRARIES}
-  ${GAZEBO_LIBRARIES}
+  ${gazebo_LIBRARIES}
 )
 
 
@@ -102,7 +119,7 @@ add_library(muscle_plugin
     src/MusclePlugin.cpp
 )
 target_link_libraries(muscle_plugin 
-  ${GAZEBO_LIBRARIES}
+  ${gazebo_LIBRARIES}
   ${Boost_LIBRARIES}
   ${ARMADILLO_LIBRARIES}
   ${catkin_LIBRARIES}
@@ -120,7 +137,7 @@ add_dependencies(roboySim
 )
 target_link_libraries(roboySim 
   ${catkin_LIBRARIES}
-  ${GAZEBO_LIBRARIES}
+  ${gazebo_LIBRARIES}
   ${Boost_LIBRARIES}
 )
 
@@ -140,7 +157,7 @@ add_dependencies(roboy_rviz
 target_link_libraries(roboy_rviz 
   ${QT_LIBRARIES}
   ${catkin_LIBRARIES}
-  ${GAZEBO_LIBRARIES}
+  ${gazebo_LIBRARIES}
 )
 
 
@@ -154,7 +171,7 @@ add_dependencies(tendon_visualizer
 )
 target_link_libraries(tendon_visualizer 
   ${catkin_LIBRARIES}
-  ${GAZEBO_LIBRARIES}
+  ${gazebo_LIBRARIES}
   ${Boost_LIBRARIES}
 )
 
